@@ -16,10 +16,10 @@ def input(request):
         form = PostForm(request.POST)
         if form.is_valid():
             content = form.cleaned_data['content']
-            list.append('you',content)
+            list.append(Contents('you',content))
             question_temp = Questions.objects.filter(question_text=content)
             answer_temp = Answers.objects.filter(pk=question_temp[0].answers_id)
-
-            return HttpResponse(list)
+            list.append(Contents('bip',answer_temp[0].answers_text))
+            return render(request,'index.html',{'list':list})
 
     return HttpResponse(form)
