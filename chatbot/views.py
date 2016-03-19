@@ -16,9 +16,10 @@ def input(request):
         form = PostForm(request.POST)
         if form.is_valid():
             content = form.cleaned_data['content']
-            answer_temp = Answers.objects.filter(questions__question_text=content)
-            list.append(Contents('user',answer_temp.answers_text))
-            return list
-            #index()
+            list.append('you',content)
+            question_temp = Questions.objects.filter(question_text=content)
+            answer_temp = Answers.objects.filter(pk=question_temp[0].answers_id)
+
+            return HttpResponse(list)
 
     return HttpResponse(form)
