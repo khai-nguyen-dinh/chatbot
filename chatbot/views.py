@@ -5,8 +5,8 @@ from django.shortcuts import render
 from chatbot.forms import PostForm
 from chatbot.models import Answers, Contents, Questions
 
-list=[Contents('bip','input your questions!')]
 def index(request):
+    list = Contents.objects.all()
     return render(request,'index.html',{'list':list})
 
 def input(request):
@@ -16,10 +16,14 @@ def input(request):
         form = PostForm(request.POST)
         if form.is_valid():
             content = form.cleaned_data['content']
-            list.append(Contents('you',content))
+            Contents(name='you',text=content).save()
             question_temp = Questions.objects.filter(question_text=content)
-            answer_temp = Answers.objects.filter(pk=question_temp[0].answers_id)
-            list.append(Contents('bip',answer_temp[0].answers_text))
+            if Questions.DoesNotExist:
+                Contents(name='bip',text="i don't know").save()
+            else:
+                answer_temp = Answers.objects.filter(pk=question_temp[0].answers_id)
+                Contents(name='bip',text=answer_temp[0].answers_text).save()
+            list = Contents.objects.all()
             return render(request,'index.html',{'list':list})
 
     return HttpResponse(form)

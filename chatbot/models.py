@@ -12,8 +12,7 @@ class Questions(models.Model):
     question_text  = models.CharField(max_length=200)
 
 
-class Contents():
-    def __init__(self,name,text):
-        self.name = name
-        self.text = text
+class Contents(models.Model):
+    name = models.CharField(max_length=200)
+    text = models.CharField(max_length=200)
 
